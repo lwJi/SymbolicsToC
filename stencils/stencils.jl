@@ -29,22 +29,27 @@ GetCoefficient: get stencil for finite difference operator.
   Note that h can be cancelled from both sides in the linear system.
 
 =#
-function GetDerivsFD(sample, order=1)
-  @variables gf[1:length(sample)], h;
-  values = [(i == order+1) ? factorial(order) : 0 for i in 1:length(sample)]
-  coeff = GetCoefficient(sample, values)
-  expr = string(simplify(sum(coeff[i] * gf[i] for i in 1:length(coeff)))/(h^order))
-  for replacerule in ReplaceGrids(length(sample))
+function GetDerivsFD(samples, order=1)
+  npts = length(samples)
+  @variables gf[1:npts], h;
+  values = [(i == order+1) ? factorial(order) : 0 for i in 1:npts]
+  coeff = GetCoefficient(samples, values)
+  expr = string(simplify(sum(coeff[i] * gf[i] for i in 1:npts))/(h^order))
+  for replacerule in ReplaceGrids(npts)
       expr = replace(expr, replacerule)
   end
   expr
 end
 
 function GetCoefficient(samples, values)
-  @variables c(..)
   npts = length(samples)
-  eqns = [sum([c(i)*samples[i]^(j-1) for i in 1:npts]) ~ values[j] for j in 1:npts]
-  return Symbolics.solve_for(eqns, [c(i) for i in 1:npts])
+  #@variables c(..)
+  #eqns = [sum([c(i)*samples[i]^(j-1) for i in 1:npts]) ~ values[j] for j in 1:npts]
+  #return Symbolics.solve_for(eqns, [c(i) for i in 1:npts])
+  A = transpose(reduce(hcat, [[samples[i]^(j-1) for i in 1:npts] for j in 1:npts]))
+  B = transpose(reduce(hcat, values))
+  # solve for A*u = B
+  A\B
 end
 
 #=
