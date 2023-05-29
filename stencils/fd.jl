@@ -2,7 +2,7 @@ module FDStencils
 
 using Symbolics
 
-export GetCoefficient, GetDerivsFD, ReplaceGrids
+#export GetCoefficient, GetDerivsFD
 
 #=
 GetCoefficient: get stencil for finite difference operator.
@@ -34,12 +34,7 @@ function GetDerivsFD(samples, order=1)
   @variables gf[1:npts], h;
   values = [(i == order+1) ? factorial(order) : 0 for i in 1:npts]
   coeff = GetCoefficient(samples, values)
-  expr = string(simplify(sum(coeff[i] * gf[i] for i in 1:npts))/(h^order))
-  pt0 = findall(x->x == 0, samples)[1]
-  for replacerule in ReplaceGrids(npts, pt0)
-    expr = replace(expr, replacerule)
-  end
-  expr
+  return string(simplify(sum(coeff[i] * gf[i] for i in 1:npts))/(h^order))
 end
 
 function GetCoefficient(samples, values)
@@ -50,28 +45,7 @@ function GetCoefficient(samples, values)
   A = transpose(reduce(hcat, [[samples[i]^(j-1) for i in 1:npts] for j in 1:npts]))
   B = transpose(reduce(hcat, values))
   # solve for A*u = B
-  A\B
-end
-
-#=
-For CarpetX
-=#
-function ReplaceGrids(npts, pt0)
-  # print(pt0)
-  [ if i == pt0
-      "gf["*string(i)*"]" => "gf(p.I)"
-    elseif abs(i-pt0) == 1
-      if i < pt0
-        "gf["*string(i)*"]" => "gf(p.I - p.DI[dir])"
-      else
-        "gf["*string(i)*"]" => "gf(p.I + p.DI[dir])"
-      end
-    elseif i < pt0
-      "gf["*string(i)*"]" => "gf(p.I - "*string(pt0-i)*"*p.DI[dir])"
-    else
-      "gf["*string(i)*"]" => "gf(p.I + "*string(i-pt0)*"*p.DI[dir])"
-    end
-  for i in 1:npts]
+  return A\B
 end
 
 end
