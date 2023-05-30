@@ -2,7 +2,8 @@ module WriteIO
 
 export WriteFile
 
-function WriteFile(headpart::Function, bodypart::Function, tailpart::Function, filename="test.txt")
+function WriteFile(headpart::Function, bodypart::Function, tailpart::Function,
+                   filename="test.txt")
   if isfile(filename)
     println("file ", filename, " already, exist, replacing it ...")
     rm(filename)

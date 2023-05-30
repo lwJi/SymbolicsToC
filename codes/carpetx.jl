@@ -26,6 +26,7 @@ end
 function PrintDerivsFD(samples, order=1)
   expr = FDStencils.GetDerivsFD(samples, order)
   pt0 = findall(x->x == 0, samples)[1]
+  # replace grid function names
   for replacerule in ReplaceGFNames(length(samples), pt0)
     expr = replace(expr, replacerule)
   end

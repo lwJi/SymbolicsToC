@@ -40,9 +40,11 @@ end
 function GetCoefficient(samples, values)
   npts = length(samples)
   #@variables c(..)
-  #eqns = [sum([c(i)*samples[i]^(j-1) for i in 1:npts]) ~ values[j] for j in 1:npts]
+  #eqns = [sum([c(i)*samples[i]^(j-1) for i in 1:npts]) ~ values[j]
+  #        for j in 1:npts]
   #return Symbolics.solve_for(eqns, [c(i) for i in 1:npts])
-  A = transpose(reduce(hcat, [[samples[i]^(j-1) for i in 1:npts] for j in 1:npts]))
+  A = transpose(reduce(hcat, [[samples[i]^(j-1) for i in 1:npts]
+                              for j in 1:npts]))
   B = transpose(reduce(hcat, values))
   # solve for A*u = B
   return A\B
