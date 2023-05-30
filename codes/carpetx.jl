@@ -30,6 +30,8 @@ function PrintDerivsFD(samples, order=1)
   for replacerule in ReplaceGFNames(length(samples), pt0)
     expr = replace(expr, replacerule)
   end
+  # replace rational num with c++ style
+  expr = replace(expr, r"\/\/(?<x>\d+)\)" => s"/T(\g<x>))")
   return expr
 end
 
