@@ -34,6 +34,7 @@ function headpart(pr::Function)
   pr("/* Produced with Julia */")
   pr()
   pr("#include <cctk.h>")
+  pr()
   pr("namespace " * thornname * " {")
   pr()
 end

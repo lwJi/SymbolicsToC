@@ -2,10 +2,11 @@
 #define TEST_HXX
 
 /* test.hxx */
-/* (c) Liwei Ji 2023-05-30 */
+/* (c) Liwei Ji 2023-05-31 */
 /* Produced with Julia */
 
 #include <cctk.h>
+
 namespace WaveToyHigherOrderX {
 
 template <typename T>
