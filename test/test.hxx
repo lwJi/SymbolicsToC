@@ -17,20 +17,32 @@ calc_fd_c1D2O(const GF3D2<const T> &gf, const PointDesc &p, const int dir) {
 
 template <typename T>
 inline CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_HOST CCTK_DEVICE T
+calc_fd_l1D1O(const GF3D2<const T> &gf, const PointDesc &p, const int dir) {
+  return (gf(p.I) - gf(p.I - p.DI[dir])) / p.DX[dir];
+}
+
+template <typename T>
+inline CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_HOST CCTK_DEVICE T
+calc_fd_r1D1O(const GF3D2<const T> &gf, const PointDesc &p, const int dir) {
+  return (gf(p.I + p.DI[dir]) - gf(p.I)) / p.DX[dir];
+}
+
+template <typename T>
+inline CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_HOST CCTK_DEVICE T
 calc_fd_c2D2O(const GF3D2<const T> &gf, const PointDesc &p, const int dir) {
-  return (gf(p.I - p.DI[dir]) + gf(p.I + p.DI[dir]) - (2/T(1))*gf(p.I)) / (pow2(p.DX[dir]));
+  return (gf(p.I - p.DI[dir]) + gf(p.I + p.DI[dir]) - (2/T(1))*gf(p.I)) / (pow(p.DX[dir], 2));
 }
 
 template <typename T>
 inline CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_HOST CCTK_DEVICE T
-calc_fd_c1D4O(const GF3D2<const T> &gf, const PointDesc &p, const int dir) {
-  return ((1/T(12))*gf(p.I - 2*p.DI[dir]) + (2/T(3))*gf(p.I + p.DI[dir]) - (1/T(12))*gf(p.I + 2*p.DI[dir]) - (2/T(3))*gf(p.I - p.DI[dir])) / p.DX[dir];
+calc_fd_l2D1O(const GF3D2<const T> &gf, const PointDesc &p, const int dir) {
+  return (gf(p.I - 2*p.DI[dir]) + gf(p.I) - (2/T(1))*gf(p.I - p.DI[dir])) / (pow(p.DX[dir], 2));
 }
 
 template <typename T>
 inline CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_HOST CCTK_DEVICE T
-calc_fd_c2D4O(const GF3D2<const T> &gf, const PointDesc &p, const int dir) {
-  return ((4/T(3))*(gf(p.I - p.DI[dir]) + gf(p.I + p.DI[dir])) - (1/T(12))*(gf(p.I - 2*p.DI[dir]) + gf(p.I + 2*p.DI[dir])) - (5/T(2))*gf(p.I)) / (pow2(p.DX[dir]));
+calc_fd_r2D1O(const GF3D2<const T> &gf, const PointDesc &p, const int dir) {
+  return (gf(p.I) + gf(p.I + 2*p.DI[dir]) - (2/T(1))*gf(p.I + p.DI[dir])) / (pow(p.DX[dir], 2));
 }
 
 } // namespace WaveToyHigherOrderX

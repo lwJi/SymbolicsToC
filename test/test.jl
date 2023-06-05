@@ -41,10 +41,14 @@ function headpart(pr::Function)
 end
 
 function bodypart(pr::Function)
-  PrintDerivsFunction(pr, "calc_fd_c1D2O", [-1//1, 0, 1])
-  PrintDerivsFunction(pr, "calc_fd_c2D2O", [-1//1, 0, 1], 2)
-  PrintDerivsFunction(pr, "calc_fd_c1D4O", [-2//1, -1, 0, 1, 2])
-  PrintDerivsFunction(pr, "calc_fd_c2D4O", [-2//1, -1, 0, 1, 2], 2)
+  PrintDerivsFunction(pr, "calc_fd_c1D2O", [-1//1,  0, 1])
+  PrintDerivsFunction(pr, "calc_fd_l1D1O", [-1//1,  0])
+  PrintDerivsFunction(pr, "calc_fd_r1D1O", [ 0//1,  1])
+  PrintDerivsFunction(pr, "calc_fd_c2D2O", [-1//1,  0, 1], 2)
+  PrintDerivsFunction(pr, "calc_fd_l2D1O", [-2//1, -1, 0], 2)
+  PrintDerivsFunction(pr, "calc_fd_r2D1O", [ 0//1,  1, 2], 2)
+  #PrintDerivsFunction(pr, "calc_fd_c1D4O", [-2//1, -1, 0, 1, 2])
+  #PrintDerivsFunction(pr, "calc_fd_c2D4O", [-2//1, -1, 0, 1, 2], 2)
 end
 
 function tailpart(pr::Function)
