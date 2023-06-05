@@ -33,8 +33,8 @@ function PrintDerivsFD(samples, order=1)
   # replace rational num with c++ style
   expr = replace(expr, r"\/\/(?<x>\d+)\)" => s"/T(\g<x>))")
   # replace h
-  expr = replace(expr, "h" => "p.DX[dir]")
   expr = replace(expr, "h^2" => "pow2(p.DX[dir])")
+  expr = replace(expr, "h" => "p.DX[dir]")
   return expr
 end
 
